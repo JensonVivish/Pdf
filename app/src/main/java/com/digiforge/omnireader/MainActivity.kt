@@ -12,6 +12,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebViewAssetLoader
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity() {
             setBackgroundColor(0xFF0B1218.toInt())
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
+            settings.setSupportZoom(false)
+            settings.builtInZoomControls = false
+            settings.displayZoomControls = false
             webViewClient = object : WebViewClient() {
                 override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                     loader.shouldInterceptRequest(request.url)
@@ -69,6 +73,13 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(web)
         web.loadUrl("https://appassets.androidplatform.net/assets/index.html")
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                web.evaluateJavascript("(window.onBack?window.onBack():false)") { r ->
+                    if (r != "true") { isEnabled = false; onBackPressedDispatcher.onBackPressed() }
+                }
+            }
+        })
         handle(intent)
     }
 
