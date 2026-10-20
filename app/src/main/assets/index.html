@@ -295,7 +295,7 @@ function tabs(){const t=$('tabs');t.innerHTML='';
     e.onclick=ev=>{if(ev.target.tagName==='B'){docs.splice(i,1);show(docs.length?Math.min(i,docs.length-1):-1)}else show(i)};t.appendChild(e)});}
 
 async function show(i){
-  speechSynthesis&&speechSynthesis.cancel();speaking=false;$('tts').classList.remove('on');
+  window.speechSynthesis&&speechSynthesis.cancel();speaking=false;$('tts').classList.remove('on');
   cur=i;tabs();$('prog').style.width='0';marks=[];mi=-1;$('cnt').textContent='';
   const v=$('view');v.innerHTML='';
   if(i<0){$('drop').style.display='';$('bar').style.display='none';$('s1').textContent='Ready';$('s2').textContent='';drawPanel();return}
@@ -384,9 +384,9 @@ document.addEventListener('keydown',e=>{if(/INPUT/.test(e.target.tagName)||e.ctr
 ['dragleave','drop'].forEach(t=>document.addEventListener(t,e=>{e.preventDefault();document.body.classList.remove('over')}));
 document.addEventListener('drop',e=>{[...e.dataTransfer.files].forEach(f=>load(f))});
 if(innerWidth<760)$('side').classList.add('hide');
-window.openShared=async(name,mime)=>{try{const m={'application/pdf':'pdf','text/plain':'txt','text/markdown':'md','text/csv':'csv','application/json':'json','text/html':'html','application/vnd.openxmlformats-officedocument.wordprocessingml.document':'docx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'xlsx','application/vnd.ms-excel':'xls'};
+window.openShared=async(name,mime,path)=>{try{const m={'application/pdf':'pdf','text/plain':'txt','text/markdown':'md','text/csv':'csv','application/json':'json','text/html':'html','application/vnd.openxmlformats-officedocument.wordprocessingml.document':'docx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'xlsx','application/vnd.ms-excel':'xls'};
  if(!/\.[a-z0-9]{2,5}$/i.test(name)&&m[mime])name+='.'+m[mime];
- const r=await fetch('/shared/f');load(new File([await r.blob()],name,{type:mime}))}catch(e){toast('Couldn’t open shared file')}};
+ document.getElementById('splash')?.click();const r=await fetch('/shared/'+(path||'f'),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);await load(new File([await r.blob()],name,{type:mime}))}catch(e){toast('Couldn’t open shared file: '+(e.message||e))}};
 drawPanel();
 </script>
 </body>
