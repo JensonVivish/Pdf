@@ -1,5 +1,5 @@
 # Omni Reader (Android)
-Dark-mode all-in-one document reader by DigiforgeDynamics. Registers itself as a handler for PDF, Word, Excel, Markdown, text, CSV, JSON, HTML and images, so other apps offer "Open with Omni Reader" (and it appears in the Share menu).
+All-in-one document reader by Alanta Nexus (dark mode with gold logo, light mode with blue logo). Registers itself as a handler for PDF, Word, Excel, Markdown, text, CSV, JSON, HTML and images, so other apps offer "Open with Omni Reader" (and it appears in the Share menu).
 
 ## Build the APK
 1. Create a GitHub repo and push this folder. The "Build APK" workflow runs automatically.
